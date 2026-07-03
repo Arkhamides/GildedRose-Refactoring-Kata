@@ -56,10 +56,19 @@ UPDATERS_BY_NAME = {
     AGED_BRIE: RateBasedItem(1, _increase_quality),
     SULFURAS: Sulfuras(),
     BACKSTAGE_PASSES: BackstagePass(),
-    CONJURED_MANA_CAKE: RateBasedItem(2, _decrease_quality),
 }
 
+CONJURED_PREFIX = "Conjured"
+CONJURED_UPDATER = RateBasedItem(2, _decrease_quality)
 DEFAULT_UPDATER = RateBasedItem(1, _decrease_quality)
+
+
+def _updater_for(name):
+    if name in UPDATERS_BY_NAME:
+        return UPDATERS_BY_NAME[name]
+    if name.startswith(CONJURED_PREFIX):
+        return CONJURED_UPDATER
+    return DEFAULT_UPDATER
 
 
 class GildedRose:
@@ -69,8 +78,7 @@ class GildedRose:
 
     def update_quality(self):
         for item in self.items:
-            updater = UPDATERS_BY_NAME.get(item.name, DEFAULT_UPDATER)
-            updater.update(item)
+            _updater_for(item.name).update(item)
 
 
 class Item:

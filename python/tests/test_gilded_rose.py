@@ -118,6 +118,10 @@ class GildedRoseTest(unittest.TestCase):
         item = self.update_quality(Item(CONJURED, 0, 3))
         self.assertEqual(0, item.quality)
 
+    def test_any_item_whose_name_starts_with_conjured_degrades_twice_as_fast(self):
+        item = self.update_quality(Item("Conjured Health Potion", 5, 10))
+        self.assertEqual(8, item.quality)
+
     # Dispatch
     def test_update_quality_applies_each_items_own_rule(self):
         normal = Item("foo", 5, 10)
